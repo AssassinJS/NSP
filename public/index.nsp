@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title>NSP Test Page</title>
+</head>
+<body>
+<h1>NSP Test Page</h1>
+<p>
+<$=JSON.stringify(process.argv)$>
+</p>
+</body>
+</html>
+<$console.log(JSON.stringify(process.argv));$>
