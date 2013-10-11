@@ -1,0 +1,4 @@
+node_modules/
+**/node_modules/
+system/log.txt
+compiled_views/

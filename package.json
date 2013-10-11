@@ -1,0 +1,7 @@
+{
+	"name":"NSP",
+	"description":"Node Server Pages",
+	"version":"0.1.0",
+	"dependencies": {
+	}
+}
