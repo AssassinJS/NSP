@@ -69,6 +69,36 @@ function compileNSPFile(filename)
 	});
 }
 
+function compileNSPFileAsync(filename)
+{
+	var nspStartDirectoryReg = new RegExp('^nsp/');
+	var nspExtensionReg = new RegExp('.nsp$');
+	var compiledCode = '';
+	
+	fs.readFileSync('./system/respond.js','utf-8',function(err,data){
+		compiledCode = compiledCode + data.toString();
+		compiledCode = compiledCode + "\r\n\r\n/*\r\nThe NSP Response starts from here\r\n*/";
+		compiledCode = compiledCode + "\r\n\r\nfunction render(__request,__response,__dataObj){\r\nvar outputstr='';\r\n";
+		compiledCode = compiledCode + "\r\ntry{";
+		
+		fs.readFileSync(fileDir+'/'+filename,'utf-8',function(err,data2){
+			var filedata = data2.toString();
+			//logger.write('view contents '+filedata,'viewcompiler');
+			if(filedata.trim().indexOf('<$!$>') != 0)
+				compiledCode = compiledCode+getCompiledCode(filedata);
+			compiledCode = compiledCode+"__createResponse(__response,200,{'Content-Type': 'text/html'},outputstr);\r\n/**/}\r\n";
+			compiledCode = compiledCode+"catch(err){__createResponse(__response,200,{'Content-Type': 'text/plain'},err.toString());\r\n/**/}\r\n";
+			compiledCode = compiledCode+"}\r\nexports.render = render;";
+			fs.writeFile('compiled_views/'+filename+'.js',compiledCode,function(err){
+				if(err)
+					logger.write('file write error for view file '+filename,'viewcompiler.js');
+				//else
+					//logger.write('file write successful for view file '+filename,'viewcompiler.js');
+			});
+		});
+	});
+}
+
 function getCompiledCode(filedata)
 {
 	var compiledCode='';
@@ -122,6 +152,7 @@ function watchNSP(filename)
 		if(curr.mtime != prev.mtime)
 		{
 			compileNSPFile(filename);
+			//compileNSPFileAsync(filename);//Trying out async for optimization
 			logger.write("called compileNSPFile again for "+filename,'viewcompiler.js');
 			//logger.write("called compileNSPFile again for "+filename+'\nthe current mtime is: ' + curr.mtime+'\ncurr is ' +JSON.stringify(curr)+'\nthe previous mtime was: ' +prev.mtime +'\nprev is '+JSON.stringify(prev),'viewcompiler.js');
 		}
