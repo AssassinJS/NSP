@@ -8,11 +8,15 @@
 
 var http = require('http');
 var viewcompiler = require('./system/viewcompiler.js');
+var lesscompiler = require('./system/lesscompiler.js');
 var fileserver = require('./system/fileserver.js');
 var logger = require('./system/logger.js');
 	
 //This function invokes the precompiler of jssp views
 viewcompiler.readNSP(function(){
+
+//This function invokes the precompiler of jssp views
+lesscompiler.readLess(function(){
 
 //This function reads all the views in compiled_views folder
 fileserver.LoadViews(function(){
@@ -20,6 +24,7 @@ fileserver.LoadViews(function(){
 //Now the server running code
 initServer();
 
+});
 });
 });
 

@@ -1,26 +1,40 @@
 Node Server Pages
-===
+=================
 
-NSP - A simple File Server with a Server Side JavaScript compiler
+*NSP - A simple File Server with a Server Side JavaScript compiler*
 
-Current Version: 0.1-DEV
+Current Dev Version: 0.2
 
+##Description
 NSP is comparable with JSP. Instead of Java code in HTML, we use JavaScript, via NodeJS.
 NSP is a sub project of AssassinJS
 
-To run the server, node nsp.js [port] [host]
+##Prerequisites
+* Latest Version of NodeJs
+* Install Dependencies by ```npm install -d```
 
-The file extension used by nsp pages are .nsp
+##Running
+To run the server ```node nsp.js [port] [host]```
+
+The file extension used by nsp pages are ```.nsp```
 The public folder is where all your files to be served will go, be it static html pages, or nsp files, or images/css/js... so on.
 
 The javascript code to be executed on server side should be wrapped in start <$ and end $> tags, example
+Example:
 
-<$ var x=1; $>
+	<$ var x=1; $>
 
 The tags <$= $> are used to directly print values in the html page
+Example:
 
-<$=x$>
+	<$=x$>
+
+Less Compiler is included, which automatically converts less files to css files in the public directory
 
 (Note that there are some known bugs, like with the compiler regarding ' "  not to work accurately every time)
 
 The code is released under the MIT License
+
+##Version Updates
+* v0.2 - Added Less compiler support
+* v0.1 - Initial extraction of working fileserver code from AssassinJS with minor improvements
