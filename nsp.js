@@ -29,22 +29,14 @@ function initServer()
 	var server = http.createServer();
 	server.on('request',route);
 
-	if(process.argv!=undefined && process.argv!=null)
-	{
-		if(process.argv[2]!=null && process.argv[2]!=undefined)
-			var port = parseInt(process.argv[2]);
-		else
-			var port = 80;
-		if(process.argv[3]!=null && process.argv[3]!=undefined)
-			var host = process.argv[3];
-		else
-			var host = '0.0.0.0';
-	}
+	if(process.argv[2]!=null && process.argv[2]!=undefined)
+		var port = parseInt(process.argv[2]);
 	else
-	{
-		var port=8000;
-		var host='0.0.0.0';
-	}
+		var port = 8000;
+	if(process.argv[3]!=null && process.argv[3]!=undefined)
+		var host = process.argv[3];
+	else
+		var host = '0.0.0.0';
 		
 	if(port!=undefined && host!=undefined)
 	{
@@ -73,16 +65,16 @@ function route(request,response)
 			request.bodyBinary = Buffer.concat(reqbodyList);
 			//logger.write(request.body,'router.js');
 		
-			process(request,response);
+			controller(request,response);
         });
     }
     else//for get requests
     {
-		process(request,response);
+		controller(request,response);
 	}
 }
 //Process function for customization through a data object (only if necessary)
-function process(req,res)
+function controller(req,res)
 {
 	var dataObj={};
 	fileserver.serveFile(req,res,null,dataObj);
