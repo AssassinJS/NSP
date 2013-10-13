@@ -7,11 +7,14 @@
 */
 
 var http = require('http');
+var fs = require('fs');
 var viewcompiler = require('./system/viewcompiler.js');
 var lesscompiler = require('./system/lesscompiler.js');
 var fileserver = require('./system/fileserver.js');
 var logger = require('./system/logger.js');
-	
+
+var dataObj = require('./dataObj.json');
+
 //This function invokes the precompiler of jssp views
 viewcompiler.readNSP(function(){
 
@@ -21,9 +24,13 @@ lesscompiler.readLess(function(){
 //This function reads all the views in compiled_views folder
 fileserver.LoadViews(function(){
 
+//For Retrieving the DataObject for use in compiled views
+initLoadDataObj(function(){
+
 //Now the server running code
 initServer();
 
+});
 });
 });
 });
@@ -81,6 +88,40 @@ function route(request,response)
 //Process function for customization through a data object (only if necessary)
 function controller(req,res)
 {
-	var dataObj={};
 	fileserver.serveFile(req,res,null,dataObj);
+}
+function initLoadDataObj(callback)
+{
+	LoadDataObj();
+	WatchDataObj();
+	callback();
+	return;
+}
+
+function LoadDataObj()
+{
+	
+	//To clear the previous cache
+	var toClear = require.resolve('./dataObj.json');
+	delete require.cache[toClear];
+	try
+	{
+		dataObj = require('./dataObj.json');	
+	}
+	catch(err)
+	{
+		console.log(err);
+		dataObj = {};
+	}
+}
+
+function WatchDataObj()
+{
+	fs.watchFile('./dataObj.json',{persistent: true, interval: 500 },function (curr, prev) {
+		if(curr.mtime != prev.mtime)
+		{
+			LoadDataObj();
+			logger.write("called LoadDataObj again",'nsp,js');
+		}
+	});
 }
