@@ -26,25 +26,29 @@ function getFileListR(path,defaultParent,extension)//the defaultParent is remove
 	var i,j;
 	for(i in filelist)
 	{
+
 		var innerPath = path+'/'+filelist[i];
 		var stats = fs.statSync(innerPath);
 		if(stats.isDirectory())
 		{
 			var innerFileList = getFileListR(innerPath,defaultParent);
 			toReturn = toReturn.concat(innerFileList);
+
 		}
 		else
 		{
 			if(extension!=null && extension!=undefined && extension!='' && extension != innerPath.split('.').pop().toLowerCase())
-				break;
-			
+				continue;
+				
 			if(defaultParent!=null && defaultParent!=undefined && defaultParent!='')
 			{
 				var dPReg = new RegExp('^'+defaultParent+'/');
 				toReturn.push(innerPath.split(dPReg)[1]);
 			}
 			else
+			{
 				toReturn.push(innerPath);
+			}
 		}
 		
 	}

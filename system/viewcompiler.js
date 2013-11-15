@@ -61,12 +61,20 @@ function compileNSPFile(filename)
 	compiledCode = compiledCode+"__createResponse(__response,200,{'Content-Type': 'text/html'},outputstr);\r\n/**/}\r\n";
 	compiledCode = compiledCode+"catch(err){__createResponse(__response,200,{'Content-Type': 'text/plain'},err.toString());\r\n/**/}\r\n";
 	compiledCode = compiledCode+"}\r\nexports.render = render;";
-	fs.writeFile('compiled_views/'+filename+'.js',compiledCode,function(err){
-		if(err)
-			logger.write('file write error for view file '+filename,'viewcompiler.js');
+	//fs.writeFile('compiled_views/'+filename+'.js',compiledCode,function(err){
+	//	if(err)
+	//		logger.write('file write error for view file '+filename,'viewcompiler.js');
 		//else
 			//logger.write('file write successful for view file '+filename,'viewcompiler.js');
-	});
+	//});
+	try
+	{
+		fs.writeFileSync('compiled_views/'+filename+'.js',compiledCode);
+	}
+	catch(err)
+	{
+		logger.write('file write error for view file '+filename,'viewcompiler.js');
+	}
 }
 
 function compileNSPFileAsync(filename)
