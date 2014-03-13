@@ -15,6 +15,7 @@ var rfs = require('./recursiveFS');
 var lessFiles = [];
 
 var fileDir = 'public';
+var noCompileDir = 'lessBlocks';
 
 //Dynamically Reading the public folder to get all the less files
 function readLess(callback)
@@ -45,6 +46,11 @@ function compileLess()
 
 function compileLessFile(filename)
 {
+	if(filename.indexOf(noCompileDir)>=0)
+	{
+		logger.write("not compiled "+filename,'lesscompiler.js');
+		return;
+	}
 	var lessExtensionReg = new RegExp('.less$');
 	
 	var lessdata = fs.readFileSync(fileDir+'/'+filename,'utf-8').toString();
