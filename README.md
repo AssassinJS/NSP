@@ -1,13 +1,13 @@
 Node Server Pages
 =================
 
-*NSP - A simple File Server with a Server Side JavaScript compiler*
+*NodeSP - A simple File Server with a Server Side JavaScript compiler*
 
-Current Dev Version: 0.2
+Current Dev Version: 0.3
 
 ##Description
-NSP is comparable with JSP. Instead of Java code in HTML, we use JavaScript, via NodeJS.
-NSP is a sub project of AssassinJS
+NodeSP is comparable with JSP. Instead of Java code in HTML, we use JavaScript, via NodeJS.
+NodeSP is a sub project of AssassinJS
 
 ##Prerequisites
 * Latest Version of NodeJs
@@ -29,12 +29,14 @@ Example:
 
 	<$=x$>
 
-Less Compiler is included, which automatically converts less files to css files in the public directory
+Less Compiler is included, which automatically converts less files to css files in the public directory. Also less file in lessBlocks directories are not compiled, which is usefull for individual blocks that are imported into other less files.
+
 
 (Note that there are some known bugs, like with the compiler regarding ' "  not to work accurately every time)
 
 The code is released under the MIT License
 
 ##Version Updates
+* v0.3 - Standalone npm module
 * v0.2 - Added Less compiler support
 * v0.1 - Initial extraction of working fileserver code from AssassinJS with minor improvements

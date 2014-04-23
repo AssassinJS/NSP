@@ -1,8 +1,18 @@
 {
-	"name":"NSP",
+	"author":"Sai Teja Jammalamadaka",
+	"name":"nodesp",
 	"description":"Node Server Pages",
-	"version":"0.2.0",
+	"version":"0.3.1",
 	"dependencies": {
-		"less": ">= 1.4.0"
+		"less": ">= 1.5.0"
+	},
+	
+	"main":"./lib/main",
+	"bin": {
+		"nodesp":"./bin/nodesp"
+	},
+	
+	"engines":{
+		"node":"*"
 	}
 }

@@ -7,14 +7,18 @@
 */
 
 var fs = require('fs');
+var path = require('path');
 var less = require('less');
 var LessParser = less.Parser;
+//var sourcemap = require('source-map');
+//var SourceMapGen = sourcemap.SourceMapGenerator;
 var logger = require('./logger');
 var rfs = require('./recursiveFS');
 
 var lessFiles = [];
 
-var fileDir = 'public';
+//var fileDir = 'public';
+var fileDir = '.';
 var noCompileDir = 'lessBlocks';
 
 //Dynamically Reading the public folder to get all the less files
@@ -53,26 +57,56 @@ function compileLessFile(filename)
 	}
 	var lessExtensionReg = new RegExp('.less$');
 	
+	var writeSourceMap = function(output) {
+		var mapfilename = options.sourceMapFullFilename;
+		ensureDirectory(mapfilename);
+		//fs.writeFileSync(mapfilename, output, 'utf8');
+		fs.writeFile(mapfilename,output,function(err){
+			if(err)
+				logger.write('file write error for css map file '+mapfilename,'lesscompiler.js');
+			else
+				logger.write('success writing '+mapfilename,'lesscompiler.js');
+		});
+	};
+	
+	var options = {};
+	options.paths = [ './'+fileDir +'/' ];
+	options.filename = filename;
+	options.sourceMap = filename.replace(lessExtensionReg,'.css.map');
+	options.sourceMapFilename = filename.replace(lessExtensionReg,'.css.map');
+	options.sourceMapFullFilename = fileDir+'/'+filename.replace(lessExtensionReg,'.css.map');
+	options.sourceMapBasepath = (filename ? path.dirname(filename) : process.cwd());
+	
 	var lessdata = fs.readFileSync(fileDir+'/'+filename,'utf-8').toString();
 	
-	lessParser = new LessParser({
-		paths: [ './'+fileDir ],
-		filename: filename
-	});
+	lessParser = new LessParser(options);
 	
 	lessParser.parse(lessdata, function(err, tree){
 		if(err)
 			logger.write('Error compiling less to css file '+filename+'  '+err,'lesscompiler.js');
-		fs.writeFile(fileDir+'/'+filename.replace(lessExtensionReg,'.css'),tree.toCSS(),function(err){
-			if(err)
-				logger.write('file write error for less to css file '+filename,'lesscompiler.js');
+		var css = tree.toCSS({
+			sourceMap:Boolean(options.sourceMap),
+			sourceMapFilename: options.sourceMapFilename,
+			writeSourceMap: writeSourceMap
 		});
+		
+		var cssfilename = fileDir+'/'+filename.replace(lessExtensionReg,'.css');
+		ensureDirectory(cssfilename);
+		fs.writeFile(cssfilename,css,function(err){
+			if(err)
+				logger.write('file write error for less to css file '+cssfilename,'lesscompiler.js');
+			else
+				logger.write('success writing '+cssfilename,'lesscompiler.js');
+		});
+		
 	});
+	
+	
 }
 
 function watchLess(filename)
 {
-	fs.watchFile('public/'+filename,{persistent: true, interval: 500 },function (curr, prev) {
+	fs.watchFile(fileDir+filename,{persistent: true, interval: 500 },function (curr, prev) {
 		if(curr.mtime != prev.mtime)
 		{
 			compileLessFile(filename);
@@ -80,6 +114,21 @@ function watchLess(filename)
 		}
 	});
 }
+
+function ensureDirectory(filepath)
+{
+    var dir = path.dirname(filepath),
+        cmd,
+        existsSync = fs.existsSync || path.existsSync;
+    if (!existsSync(dir)) {
+        if (mkdirp === undefined) {
+            try {mkdirp = require('mkdirp');}
+            catch(e) { mkdirp = null; }
+        }
+        cmd = mkdirp && mkdirp.sync || fs.mkdirSync;
+        cmd(dir);
+    }
+};
 
 exports.readLess = readLess;
 exports.compileLess = compileLess;

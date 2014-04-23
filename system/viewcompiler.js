@@ -12,7 +12,8 @@ var rfs = require('./recursiveFS');
 
 var nspFiles = [];
 
-var fileDir = 'public';
+//var fileDir = 'public';
+var fileDir = './';
 
 //Dynamically Reading the nsp folder to get all the nsp files
 function readNSP(callback)
