@@ -19,7 +19,7 @@ var defaultFile = 'index.nsp';
 var ViewsList = {};
 
 //var compiledDir = 'compiled_views'
-var compiledDir = '.'
+var compiledDir = '.';
 
 function setDefaultFile(toSet)
 {
@@ -88,7 +88,7 @@ function serveFile(req,res,defaultDir,dataObj)
 	//filepath = filepath.split('/'+filepath.split('/')[1])[1];
 	logger.write('filepath is '+filepath,'fileserver.js');
 	if(defaultDir==null ||defaultDir==undefined)
-		defaultDir='public';
+		defaultDir=compiledDir;
 	var filepathreg = /\/$/g;
 	//logger.write('defaultFile '+defaultFile);
 	if(filepathreg.test(filepath)==true) filepath = filepath+defaultFile;
@@ -101,7 +101,7 @@ function serveFile(req,res,defaultDir,dataObj)
 		serveView(req,res,dataObj);
 	else
 	{
-	fs.readFile("./"+defaultDir+filepath,function(err,data){
+	fs.readFile("./"+defaultDir+'/'+filepath,function(err,data){
 	//fs.readFile("."+filepath,function(err,data){
 		if(err)
 		{

@@ -88,8 +88,7 @@ function route(request,response)
 //Process function for customization through a data object (only if necessary)
 function controller(req,res)
 {
-	//fileserver.serveFile(req,res,null,dataObj);
-	fileserver.serveFile(req,res,'',dataObj);
+	fileserver.serveFile(req,res,null,dataObj);
 }
 function initLoadDataObj(callback)
 {
