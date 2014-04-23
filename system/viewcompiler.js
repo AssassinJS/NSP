@@ -13,7 +13,8 @@ var rfs = require('./recursiveFS');
 var nspFiles = [];
 
 //var fileDir = 'public';
-var fileDir = './';
+var fileDir = '.';
+var compiledDir = '.';
 
 //Dynamically Reading the nsp folder to get all the nsp files
 function readNSP(callback)
@@ -25,7 +26,8 @@ function readNSP(callback)
 	//second parameter is default directory, true removes the parent dir from each entry in the list
 	//third parameter is the file extension to read in the list
 	nspFiles = rfs.getFileList(fileDir,true,'nsp'); 
-	rfs.createRecursiveDirectories(fileDir,'compiled_views');
+	if(fileDir !== compiledDir)
+		rfs.createRecursiveDirectories(fileDir,compiledDir);
 	compileNSP();
 	callback();
 	return;
@@ -70,7 +72,7 @@ function compileNSPFile(filename)
 	//});
 	try
 	{
-		fs.writeFileSync('compiled_views/'+filename+'.js',compiledCode);
+		fs.writeFileSync(compiledDir+'/'+filename+'.js',compiledCode);
 	}
 	catch(err)
 	{
@@ -98,7 +100,7 @@ function compileNSPFileAsync(filename)
 			compiledCode = compiledCode+"__createResponse(__response,200,{'Content-Type': 'text/html'},outputstr);\r\n/**/}\r\n";
 			compiledCode = compiledCode+"catch(err){__createResponse(__response,200,{'Content-Type': 'text/plain'},err.toString());\r\n/**/}\r\n";
 			compiledCode = compiledCode+"}\r\nexports.render = render;";
-			fs.writeFile('compiled_views/'+filename+'.js',compiledCode,function(err){
+			fs.writeFile(compiledDir+'/'+filename+'.js',compiledCode,function(err){
 				if(err)
 					logger.write('file write error for view file '+filename,'viewcompiler.js');
 				//else

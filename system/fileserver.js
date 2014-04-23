@@ -18,6 +18,9 @@ var filetypemap = require('./filetypelist.json');
 var defaultFile = 'index.nsp';
 var ViewsList = {};
 
+//var compiledDir = 'compiled_views'
+var compiledDir = '.'
+
 function setDefaultFile(toSet)
 {
 	defaultFile = toSet;
@@ -26,7 +29,7 @@ function setDefaultFile(toSet)
 function LoadViews(callback)
 {
 	var ViewFiles = [];
-	ViewFiles = rfs.getFileList('compiled_views',true);
+	ViewFiles = rfs.getFileList(compiledDir,true,'js');
 	for(i in ViewFiles)
 	{
 		LoadView(ViewFiles[i]);
@@ -38,30 +41,33 @@ function LoadViews(callback)
 
 function LoadView(ViewFile)
 {
-	ViewExtensionReg = new RegExp('.js$');
+	ViewExtensionReg = new RegExp('.nsp.js$');
 	if(ViewExtensionReg.test(ViewFile))
 	{
 		//To clear the previous cache
-		var toClear = require.resolve('../compiled_views/'+ViewFile);
+		//var toClear = require.resolve('../compiled_views/'+ViewFile);
+		var toClear = require.resolve('../'+compiledDir+'/'+ViewFile);
 		//logger.write('resolved require object is '+toClear,'fileserver.js');
 		delete require.cache[toClear];
 			
 		//logger.write('ViewFile is '+ViewFile,'fileserver.js');
 		try
 		{
-			ViewsList['/'+ViewFile] = require('../compiled_views/'+ViewFile);	
+			//ViewsList['/'+ViewFile] = require('../compiled_views/'+ViewFile);	
+			ViewsList['/'+ViewFile] = require('../'+compiledDir+'/'+ViewFile);	
 		}
 		catch(err)
 		{
 			console.log(err);
-			ViewsList['/'+ViewFile] = require('../compiled_views/error.nsp.js');
+			//ViewsList['/'+ViewFile] = require('../compiled_views/error.nsp.js');
+			ViewsList['/'+ViewFile] = require('../'+compiledDir+'/error.nsp.js');
 		}
 	}
 }
 
 function WatchViews(ViewFile)
 {
-	fs.watchFile('./compiled_views/'+ViewFile,{persistent: true, interval: 500 },function (curr, prev) {
+	fs.watchFile('./'+compiledDir+'/'+ViewFile,{persistent: true, interval: 500 },function (curr, prev) {
 		//logger.write('the current mtime is: ' + curr.mtime,'views in fileserver.js');
 		//logger.write('the previous mtime was: ' + prev.mtime,'views in fileserver.js');
 		//if(curr.mtime.getTime() != prev.mtime.getTime())

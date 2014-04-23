@@ -31,16 +31,17 @@ function getFileListR(path,defaultParent,extension)//the defaultParent is remove
 		var stats = fs.statSync(innerPath);
 		if(stats.isDirectory())
 		{
-			var innerFileList = getFileListR(innerPath,defaultParent);
+			var innerFileList = getFileListR(innerPath,defaultParent,extension);
 			toReturn = toReturn.concat(innerFileList);
 
 		}
 		else
 		{
-			if(extension!=null && extension!=undefined && extension!='' && extension != innerPath.split('.').pop().toLowerCase())
+			//console.log(extension+'   -----------------   '+innerPath.split('.').pop().toLowerCase())	
+			if(extension!==null && typeof extension!=='undefined' && extension!=='' && extension !== innerPath.split('.').pop().toLowerCase())
 				continue;
-				
-			if(defaultParent!=null && defaultParent!=undefined && defaultParent!='')
+			//console.log(extension+'   +++++====+++++   '+innerPath.split('.').pop().toLowerCase())	
+			if(defaultParent!==null && typeof defaultParent !== 'undefined' && defaultParent!=='')
 			{
 				var dPReg = new RegExp('^'+defaultParent+'/');
 				toReturn.push(innerPath.split(dPReg)[1]);
