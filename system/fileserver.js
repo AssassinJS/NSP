@@ -101,7 +101,7 @@ function serveFile(req,res,defaultDir,dataObj)
 		serveView(req,res,dataObj);
 	else
 	{
-	fs.readFile("./"+defaultDir+'/'+filepath,function(err,data){
+	fs.readFile("./"+defaultDir+filepath,function(err,data){
 	//fs.readFile("."+filepath,function(err,data){
 		if(err)
 		{
