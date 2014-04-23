@@ -106,7 +106,7 @@ function compileLessFile(filename)
 
 function watchLess(filename)
 {
-	fs.watchFile(fileDir+filename,{persistent: true, interval: 500 },function (curr, prev) {
+	fs.watchFile(fileDir+'/'+filename,{persistent: true, interval: 500 },function (curr, prev) {
 		if(curr.mtime != prev.mtime)
 		{
 			compileLessFile(filename);
