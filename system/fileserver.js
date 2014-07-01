@@ -15,7 +15,7 @@ var respond = require('./respond');
 
 //Global Variabels in this module
 var filetypemap = require('./filetypelist.json');
-var defaultFile = 'index.nsp';
+var defaultFile = 'index.html';
 var ViewsList = {};
 
 //var compiledDir = 'compiled_views'
