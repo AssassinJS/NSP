@@ -2,7 +2,7 @@
 	"author":"Sai Teja Jammalamadaka",
 	"name":"nodesp",
 	"description":"Node Server Pages",
-	"version":"0.3.8",
+	"version":"0.3.9",
 	"dependencies": {
 		"less": ">= 1.5.0"
 	},
