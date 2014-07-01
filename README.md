@@ -3,7 +3,7 @@ Node Server Pages
 
 *NodeSP - A simple File Server with a Server Side JavaScript compiler*
 
-Current Dev Version: 0.3.5
+Current Dev Version: 0.3.6
 
 ##Description
 NodeSP is comparable with JSP. Instead of Java code in HTML, we use JavaScript, via NodeJS.
