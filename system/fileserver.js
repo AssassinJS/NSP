@@ -46,7 +46,7 @@ function LoadView(ViewFile)
 	{
 		//To clear the previous cache
 		//var toClear = require.resolve('../compiled_views/'+ViewFile);
-		var toClear = require.resolve('../'+compiledDir+'/'+ViewFile);
+		var toClear = require.resolve('./'+compiledDir+'/'+ViewFile);
 		//logger.write('resolved require object is '+toClear,'fileserver.js');
 		delete require.cache[toClear];
 			
@@ -54,13 +54,13 @@ function LoadView(ViewFile)
 		try
 		{
 			//ViewsList['/'+ViewFile] = require('../compiled_views/'+ViewFile);	
-			ViewsList['/'+ViewFile] = require('../'+compiledDir+'/'+ViewFile);	
+			ViewsList['/'+ViewFile] = require('./'+compiledDir+'/'+ViewFile);	
 		}
 		catch(err)
 		{
 			console.log(err);
 			//ViewsList['/'+ViewFile] = require('../compiled_views/error.nsp.js');
-			ViewsList['/'+ViewFile] = require('../'+compiledDir+'/error.nsp.js');
+			ViewsList['/'+ViewFile] = require('./'+compiledDir+'/error.nsp.js');
 		}
 	}
 }
