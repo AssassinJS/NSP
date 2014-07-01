@@ -9,6 +9,7 @@
 var fs = require('fs');
 var logger = require('./logger');
 var rfs = require('./recursiveFS');
+var respond = require('./respond');
 
 var nspFiles = [];
 
@@ -52,7 +53,7 @@ function compileNSPFile(filename)
 	var nspExtensionReg = new RegExp('.nsp$');
 	var compiledCode = '';
 	
-	compiledCode = compiledCode + fs.readFileSync('./system/respond.js','utf-8').toString();
+	compiledCode = compiledCode + respond.createResponse.toString();
 	
 	compiledCode = compiledCode + "\r\n\r\n/*\r\nThe NSP Response starts from here\r\n*/";
 	compiledCode = compiledCode + "\r\n\r\nfunction render(__request,__response,__dataObj){\r\nvar outputstr='';\r\n";
